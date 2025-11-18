@@ -301,45 +301,6 @@ curl http://localhost:8080/interface-guide/
 - Cross-site links work correctly
 - Monorepo structure preserved
 
-### Phase 4: Link Checker Container Stub
-
-**Goal**: Create minimal link checker that validates the server is working.
-
-**Tasks**:
-1. Create `link_check/cli.py`
-   - Argument parsing for `--base-url`, `--output`
-   - Simple HTTP GET to base URL
-   - Report success/failure
-2. Create `docker/link-checker/Dockerfile`
-   - Base: `python:3.12-slim`
-   - Copy link_check package
-   - Install requests library
-   - Set entrypoint to cli.py
-3. Add `link-checker` service to `docker-compose.yml`
-   - Network: same as docs-nginx
-   - No port exposure needed (uses internal network)
-   - Mount for output: `./reports:/reports`
-
-**Test**:
-```bash
-# Start nginx
-docker compose up -d docs-nginx
-
-# Run link checker stub
-docker compose run --rm link-checker \
-    --base-url http://docs-nginx:8080 \
-    --output /reports/test.yaml
-
-# Check output
-cat reports/test.yaml
-```
-
-**Success Criteria**:
-- Link checker connects to nginx via internal network
-- Base URL returns HTTP 200
-- YAML output file created
-- Sub-second execution time
-
 ## Docker Compose Structure
 
 ```yaml
@@ -388,7 +349,7 @@ def test_server_workflow():
     # Verify site directory populated with HTML
     # Start nginx service
     # Verify nginx serves content correctly
-    # Test multiple page paths (root, sub-pages, cross-site links)
+    # Test multiple page paths (root, sub-pages)
     # Verify environment variables in generated HTML
 ```
 
