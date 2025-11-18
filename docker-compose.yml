@@ -1,0 +1,9 @@
+services:
+  docs-nginx:
+    build:
+      context: docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
